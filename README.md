@@ -35,6 +35,8 @@ export default ClickedButton;
 Vi har en enkel komponent där ett meddelande visas när användaren klickar på en knapp. Det är det vi ska testa med Cypress.
 
 ## Skapa en testfil
+
+Skapa en testfil som döps till clickedButton.cy.js i mappen e2e.
 ```
 cypress/e2e/clickedButton.cy.js
 
