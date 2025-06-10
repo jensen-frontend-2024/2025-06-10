@@ -1,12 +1,66 @@
-# React + Vite
+## Installera Cypress
+```
+npm install cypress --save-dev
+```
+## Kör cypress (för att skapa mapparna)
+```
+npx cypress open
+```
+## Mappstruktur
+Mappen cypress har undermappar för olika ändamål:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- fixtures – för testdata (t.ex. json).
+- support – för gemensam konfiguration eller kommandon.
 
-Currently, two official plugins are available:
+Skapa en ny mapp - döp den till e2e:
+e2e – här skapar vi våra testfiler.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Skapa en komponent
+```
+import { useState } from "react";
 
-## Expanding the ESLint configuration
+function ClickedButton() {
+  const [clicked, setClicked] = useState(false);
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+  return (
+    <section>
+      <button onClick={() => setClicked(true)}>Klicka mig</button>
+      {clicked && <p>Du klickade!</p>}
+    </section>
+  );
+}
+
+export default ClickedButton;
+```
+Vi har en enkel komponent där ett meddelande visas när användaren klickar på en knapp. Det är det vi ska testa med Cypress.
+
+## Skapa en testfil
+```
+cypress/e2e/clickedButton.cy.js
+
+describe("Knappinteraktion", () => {
+  it("ska visa meddelande när knappen klickas", () => {
+    cy.visit("http://localhost:5173");
+    cy.get("button").click();
+    cy.contains("Du klickade!").should("be.visible");
+  });
+});
+```
+Vi använder cy.visit() för att ladda appen, 
+cy.get() för att hitta knappen, 
+.click() för att klicka, 
+och cy.contains() för att kolla att meddelandet visas.
+
+## Kör testet med Cypress 
+
+1. starta dev-servern med 
+```
+npm run dev
+```
+
+2. Se till att Cypress är igång
+
+3. Klicka på clickButton.cy.js i Cypress GUI
+
+Cypress behöver att vår app är igång, så jag startar Vite med npm run dev.
+Sedan klickar jag på testfilen i Cypress – och där ser vi testet köras i realtid!
